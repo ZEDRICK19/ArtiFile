@@ -1,0 +1,266 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+}
+
+enum DocumentStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  UNDER_REVIEW
+  ACCEPTED
+  REVISION_REQUIRED
+  REJECTED
+}
+
+enum RequirementCategory {
+  PRE_AUDITION
+  POST_AUDITION
+}
+
+enum ResourceKind {
+  FORM
+  MANUAL
+  CERTIFICATE
+}
+
+enum NotificationType {
+  DOCUMENT_ACCEPTED
+  DOCUMENT_REVISION
+  DOCUMENT_REJECTED
+  APPLICATION_STATUS
+  POST_AUDITION_UNLOCKED
+  NEW_REGISTRATION
+  DOCUMENT_SUBMITTED
+  DOCUMENT_REPLACED
+  SYSTEM
+}
+
+model User {
+  id                  String    @id @default(uuid())
+  email               String    @unique
+  passwordHash        String
+  role                Role      @default(STUDENT)
+  isActive            Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  studentProfile      StudentProfile?
+  application         Application?
+  notifications       Notification[]
+  activities          ActivityLog[]
+  eventsCreated       Event[]
+  reviewedDocuments   Document[]    @relation("DocumentReviewer")
+  decidedApplications Application[] @relation("ApplicationDecider")
+
+  @@index([role])
+  @@index([isActive])
+}
+
+model CulturalGroup {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  students  StudentProfile[]
+
+  @@index([isActive])
+}
+
+model StudentProfile {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  fullName        String
+  phone           String
+  yearLevel       String
+  program         String
+  campus          String    @default("Alangilan Campus")
+  academicYear    String
+  culturalGroupId String
+  srCode          String?   @unique
+  archivedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  culturalGroup CulturalGroup @relation(fields: [culturalGroupId], references: [id], onDelete: Restrict)
+
+  @@index([culturalGroupId])
+  @@index([yearLevel])
+  @@index([archivedAt])
+  @@index([fullName])
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  userId      String            @unique
+  status      ApplicationStatus @default(PENDING)
+  feedback    String?
+  appliedAt   DateTime          @default(now())
+  decidedAt   DateTime?
+  decidedById String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  decidedBy User?      @relation("ApplicationDecider", fields: [decidedById], references: [id], onDelete: SetNull)
+  documents Document[]
+
+  @@index([status])
+  @@index([appliedAt])
+}
+
+model Requirement {
+  id                String              @id @default(uuid())
+  key               String              @unique
+  title             String
+  description       String?
+  category          RequirementCategory
+  allowedMimeTypes  String[]
+  allowedExtensions String[]
+  maxFileSizeMb     Int                 @default(5)
+  isActive          Boolean             @default(true)
+  sortOrder         Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  documents         Document[]
+
+  @@index([category, isActive])
+}
+
+model Document {
+  id              String        @id @default(uuid())
+  applicationId   String
+  requirementId   String
+  status          DocumentStatus @default(NOT_SUBMITTED)
+  feedback        String?
+  currentFileKey  String?
+  currentFileName String?
+  currentMimeType String?
+  currentFileSize Int?
+  submittedAt     DateTime?
+  updatedAt       DateTime      @updatedAt
+  reviewedById    String?
+  reviewedAt      DateTime?
+
+  application Application                  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  requirement Requirement                  @relation(fields: [requirementId], references: [id], onDelete: Restrict)
+  reviewedBy  User?                        @relation("DocumentReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  history     DocumentSubmissionHistory[]
+
+  @@unique([applicationId, requirementId])
+  @@index([status])
+}
+
+model DocumentSubmissionHistory {
+  id           String   @id @default(uuid())
+  documentId   String
+  version      Int
+  action       String
+  fileKey      String
+  fileName     String
+  mimeType     String
+  fileSize     Int
+  uploadedById String
+  createdAt    DateTime @default(now())
+
+  document     Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, version])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType @default(SYSTEM)
+  link      String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  actorId     String
+  action      String
+  entityType  String
+  entityId    String?
+  applicantId String?
+  documentId  String?
+  details     String?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  actor       User     @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([actorId])
+  @@index([applicantId])
+  @@index([action])
+}
+
+model Event {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  location    String?
+  startAt     DateTime
+  endAt       DateTime?
+  isActive    Boolean   @default(true)
+  createdById String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([startAt])
+  @@index([isActive])
+}
+
+model Resource {
+  id          String       @id @default(uuid())
+  key         String       @unique
+  kind        ResourceKind
+  title       String
+  description String?
+  fileKey     String?
+  fileName    String?
+  externalUrl String?
+  sortOrder   Int          @default(0)
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([kind, isActive])
+}
+
+model Setting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
