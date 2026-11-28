@@ -31,7 +31,7 @@ export function render() {
         </div>
         <div class="hero__visual">
           <div class="hero-card hero-card--main">
-            <div class="hero-card__top"><span class="avatar">JD</span><div><strong>Juan Dela Cruz</strong><small>BatStateU Ad Libitum Chorus</small></div></div>
+            <div class="hero-card__top"><span class="avatar">JM</span><div><strong>John Monterey</strong><small>BatStateU Ad Libitum Chorus</small></div></div>
             <div class="hero-card__row"><span>Pre-Audition Requirements</span><span class="badge badge--success">Accepted</span></div>
             <div class="hero-card__row"><span>Photocopy of Parent's ID</span><span class="badge badge--warning">Under Review</span></div>
             <div class="hero-card__row"><span>Performer's Profile</span><span class="badge badge--neutral">Not Submitted</span></div>

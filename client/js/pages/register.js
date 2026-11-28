@@ -37,7 +37,7 @@ export function render() {
 
         <form id="register-form" novalidate>
           <div class="form-grid">
-            ${field('Complete Name *', `<input type="text" id="fullName" name="fullName" placeholder="Juan D. Dela Cruz" autocomplete="name" required />`)}
+            ${field('Complete Name *', `<input type="text" id="fullName" name="fullName" placeholder="John Monterey" autocomplete="name" required />`)}
             ${field('Email Address *', `<input type="email" id="email" name="email" placeholder="student${GSUITE_DOMAIN}" autocomplete="email" required />`)}
             ${field('Phone Number *', `<input type="tel" id="phone" name="phone" placeholder="09171234567" autocomplete="tel" required />`)}
             ${field('SR-CODE', `<input type="text" id="srCode" name="srCode" placeholder="22-00001" />`)}

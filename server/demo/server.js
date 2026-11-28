@@ -217,19 +217,17 @@ function addStudent(options) {
 }
 
 const sampleStudent = addStudent({
-  email: STUDENT_EMAIL, password: STUDENT_PASSWORD, fullName: 'Juan Dela Cruz',
+  email: STUDENT_EMAIL, password: STUDENT_PASSWORD, fullName: 'John Monterey',
   program: 'Bachelor of Arts in Filipino', yearLevel: '1st Year', groupIndex: 0,
   status: 'PENDING', srCode: '22-00001', docs: { waiver: 'SUBMITTED' }
 });
 
 const seedStudents = [
-  { email: 'student@g.batstate-u.edu.ph', password: 'Student123!', name: 'Maria Santos', program: 'Bachelor of Science in Accountancy', year: '2nd Year', group: 1, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'SUBMITTED' } },
-  { email: 'andres.bonifacio@g.batstate-u.edu.ph', name: 'Andres Bonifacio', program: 'Bachelor of Engineering', year: '3rd Year', group: 2, status: 'UNDER_REVIEW', docs: { waiver: 'UNDER_REVIEW', parent_id: 'SUBMITTED' } },
-  { email: 'corazon.aquino@g.batstate-u.edu.ph', name: 'Corazon Aquino', program: 'Bachelor of Education', year: '4th Year', group: 3, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'ACCEPTED' } },
-  { email: 'jose.rizal@g.batstate-u.edu.ph', name: 'Jose Rizal', program: 'Bachelor of Science in Computer Science', year: '1st Year', group: 4, status: 'PENDING', docs: { waiver: 'REVISION_REQUIRED' } },
-  { email: 'melchora.aquino@g.batstate-u.edu.ph', name: 'Melchora Aquino', program: 'Bachelor of Arts in Communication', year: '2nd Year', group: 5, status: 'REJECTED', feedback: 'Did not meet the audition criteria.', docs: { waiver: 'REJECTED', parent_id: 'SUBMITTED' } },
-  { email: 'emilio.aguinaldo@g.batstate-u.edu.ph', name: 'Emilio Aguinaldo', program: 'Bachelor of Science in Nursing', year: '3rd Year', group: 6, status: 'PENDING', docs: {} },
-  { email: 'gregoria.dejesus@g.batstate-u.edu.ph', name: 'Gregoria de Jesus', program: 'Bachelor of Arts in History', year: '4th Year', group: 0, status: 'UNDER_REVIEW', docs: { waiver: 'SUBMITTED', parent_id: 'UNDER_REVIEW' } }
+  { email: 'charish.villanueva@g.batstate-u.edu.ph', password: 'Student123!', name: 'Charish Villanueva', program: 'Bachelor of Science in Accountancy', year: '2nd Year', group: 1, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'SUBMITTED' } },
+  { email: 'precious.navarro@g.batstate-u.edu.ph', name: 'Precious Navarro', program: 'Bachelor of Engineering', year: '3rd Year', group: 2, status: 'UNDER_REVIEW', docs: { waiver: 'UNDER_REVIEW', parent_id: 'SUBMITTED' } },
+  { email: 'zed.monterey@g.batstate-u.edu.ph', name: 'Zed Monterey', program: 'Bachelor of Education', year: '4th Year', group: 3, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'ACCEPTED' } },
+  { email: 'cha.vilanueva@g.batstate-u.edu.ph', name: 'Cha Vilanueva', program: 'Bachelor of Science in Computer Science', year: '1st Year', group: 4, status: 'PENDING', docs: { waiver: 'REVISION_REQUIRED' } },
+  { email: 'adelline.navarro@g.batstate-u.edu.ph', name: 'Adelline Navarro', program: 'Bachelor of Arts in Communication', year: '2nd Year', group: 5, status: 'REJECTED', feedback: 'Did not meet the audition criteria.', docs: { waiver: 'REJECTED', parent_id: 'SUBMITTED' } }
 ];
 
 const seededAccounts = seedStudents.map((item) => addStudent({
@@ -239,7 +237,7 @@ const seededAccounts = seedStudents.map((item) => addStudent({
 }));
 
 notifications.push(
-  { id: nextId('notif'), userId: 'admin-1', title: 'New student registered', message: 'Juan Dela Cruz created a new ArtiFile account.', type: 'NEW_REGISTRATION', link: '/admin/applicants', isRead: false, createdAt: daysAgo(1) },
+  { id: nextId('notif'), userId: 'admin-1', title: 'New student registered', message: 'John Monterey created a new ArtiFile account.', type: 'NEW_REGISTRATION', link: '/admin/applicants', isRead: false, createdAt: daysAgo(1) },
   { id: nextId('notif'), userId: sampleStudent.user.id, title: 'Application received', message: 'Your application has been submitted and is awaiting review.', type: 'APPLICATION_STATUS', link: '/student/status', isRead: false, createdAt: daysAgo(2) },
   { id: nextId('notif'), userId: seededAccounts[0].user.id, title: 'Application accepted', message: 'Your post-audition requirement is now unlocked.', type: 'POST_AUDITION_UNLOCKED', link: '/student/requirements?category=POST_AUDITION', isRead: false, createdAt: daysAgo(3) }
 );

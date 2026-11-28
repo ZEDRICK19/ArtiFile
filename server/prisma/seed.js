@@ -206,10 +206,10 @@ async function main() {
     });
     await prisma.studentProfile.upsert({
       where: { userId: sample.id },
-      update: {},
+      update: { fullName: 'John Monterey' },
       create: {
         userId: sample.id,
-        fullName: 'Juan D. Dela Cruz',
+        fullName: 'John Monterey',
         phone: '09171234567',
         yearLevel: '2nd Year',
         program: 'BS Information Technology',
