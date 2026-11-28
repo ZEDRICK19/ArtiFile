@@ -176,7 +176,7 @@ function addStudent(options) {
     id: nextId('profile'), userId, fullName: options.fullName,
     phone: options.phone || '09171234567',
     yearLevel: options.yearLevel || '1st Year',
-    program: options.program || 'Bachelor of Arts in Filipino',
+    program: options.program || 'BS Information Technology',
     campus: 'Alangilan Campus', academicYear: '2026-2027',
     srCode: options.srCode || null,
     culturalGroupId: culturalGroups[options.groupIndex || 0].id,
@@ -218,16 +218,16 @@ function addStudent(options) {
 
 const sampleStudent = addStudent({
   email: STUDENT_EMAIL, password: STUDENT_PASSWORD, fullName: 'John Monterey',
-  program: 'Bachelor of Arts in Filipino', yearLevel: '1st Year', groupIndex: 0,
+  program: 'BS Information Technology', yearLevel: '1st Year', groupIndex: 0,
   status: 'PENDING', srCode: '22-00001', docs: { waiver: 'SUBMITTED' }
 });
 
 const seedStudents = [
-  { email: 'charish.villanueva@g.batstate-u.edu.ph', password: 'Student123!', name: 'Charish Villanueva', program: 'Bachelor of Science in Accountancy', year: '2nd Year', group: 1, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'SUBMITTED' } },
-  { email: 'precious.navarro@g.batstate-u.edu.ph', name: 'Precious Navarro', program: 'Bachelor of Engineering', year: '3rd Year', group: 2, status: 'UNDER_REVIEW', docs: { waiver: 'UNDER_REVIEW', parent_id: 'SUBMITTED' } },
-  { email: 'zed.monterey@g.batstate-u.edu.ph', name: 'Zed Monterey', program: 'Bachelor of Education', year: '4th Year', group: 3, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'ACCEPTED' } },
-  { email: 'cha.vilanueva@g.batstate-u.edu.ph', name: 'Cha Vilanueva', program: 'Bachelor of Science in Computer Science', year: '1st Year', group: 4, status: 'PENDING', docs: { waiver: 'REVISION_REQUIRED' } },
-  { email: 'adelline.navarro@g.batstate-u.edu.ph', name: 'Adelline Navarro', program: 'Bachelor of Arts in Communication', year: '2nd Year', group: 5, status: 'REJECTED', feedback: 'Did not meet the audition criteria.', docs: { waiver: 'REJECTED', parent_id: 'SUBMITTED' } }
+  { email: 'charish.villanueva@g.batstate-u.edu.ph', password: 'Student123!', name: 'Charish Villanueva', program: 'BS Computer Science', year: '2nd Year', group: 1, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'SUBMITTED' } },
+  { email: 'precious.navarro@g.batstate-u.edu.ph', name: 'Precious Navarro', program: 'BS Aerospace Engineering', year: '3rd Year', group: 2, status: 'UNDER_REVIEW', docs: { waiver: 'UNDER_REVIEW', parent_id: 'SUBMITTED' } },
+  { email: 'zed.monterey@g.batstate-u.edu.ph', name: 'Zed Monterey', program: 'BS Architecture', year: '4th Year', group: 3, status: 'ACCEPTED', docs: { waiver: 'ACCEPTED', parent_id: 'ACCEPTED', performer_profile: 'ACCEPTED' } },
+  { email: 'cha.vilanueva@g.batstate-u.edu.ph', name: 'Cha Vilanueva', program: 'BS Computer Science', year: '1st Year', group: 4, status: 'PENDING', docs: { waiver: 'REVISION_REQUIRED' } },
+  { email: 'adelline.navarro@g.batstate-u.edu.ph', name: 'Adelline Navarro', program: 'BS Information Technology', year: '2nd Year', group: 5, status: 'REJECTED', feedback: 'Did not meet the audition criteria.', docs: { waiver: 'REJECTED', parent_id: 'SUBMITTED' } }
 ];
 
 const seededAccounts = seedStudents.map((item) => addStudent({
@@ -445,7 +445,7 @@ add('POST', '/api/auth/login', async (req, res) => {
     const namePart = email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
     const created = addStudent({
       email, password: password || 'DemoPass123!', fullName: namePart,
-      program: 'Bachelor of Arts in Filipino', yearLevel: '1st Year', groupIndex: 0, status: 'PENDING'
+      program: 'BS Information Technology', yearLevel: '1st Year', groupIndex: 0, status: 'PENDING'
     });
     user = created.user;
     notifyAdmin('New student registered', `${namePart} (${email}) created a new ArtiFile account.`, 'NEW_REGISTRATION', '/admin/applicants');
@@ -486,7 +486,7 @@ add('POST', '/api/auth/register', async (req, res) => {
   const created = addStudent({
     email, password: String(data.password), fullName: String(data.fullName || email.split('@')[0]),
     phone: String(data.phone || '09171234567'),
-    program: String(data.program || 'Bachelor of Arts in Filipino'),
+    program: String(data.program || 'BS Information Technology'),
     yearLevel: String(data.yearLevel || '1st Year'),
     srCode: String(data.srCode || '') || null,
     groupIndex, status: 'PENDING', createdDaysAgo: 0, appliedDaysAgo: 0
